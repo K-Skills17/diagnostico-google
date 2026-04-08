@@ -421,9 +421,43 @@ h1, h2, h3, h4 {
 /* Share button */
 .btn-share { margin-top: 8px; }
 
+/* Contact section */
+.contact-section {
+  text-align: center;
+  margin-top: 32px;
+  padding: 24px;
+}
+.contact-label {
+  font-size: 13px;
+  color: var(--text-light);
+  margin-bottom: 12px;
+}
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-link:hover {
+  color: var(--accent);
+}
+.contact-link svg {
+  flex-shrink: 0;
+}
+
 @media (max-width: 640px) {
   .landing-features { grid-template-columns: 1fr; gap: 24px; }
   .question-options { flex-direction: column; }
   .cta-section { padding: 32px 24px; }
   .teaser-gate { padding: 28px 20px; }
+  .contact-links { flex-direction: column; align-items: center; gap: 12px; }
 }

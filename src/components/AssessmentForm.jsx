@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { sections } from '../utils/questions';
 
-export default function AssessmentForm({ leadData, onSubmit }) {
+export default function AssessmentForm({ onSubmit }) {
   const [answers, setAnswers] = useState({});
 
   const setAnswer = (questionId, value) => {
@@ -24,10 +24,11 @@ export default function AssessmentForm({ leadData, onSubmit }) {
           <div className="progress-step active" />
           <div className="progress-step active" />
           <div className="progress-step" />
+          <div className="progress-step" />
         </div>
 
         <div className="diagnostic-header fade-up">
-          <h2>Diagnóstico de {leadData.clinica}</h2>
+          <h2>Diagnóstico do Google Meu Negócio</h2>
           <p>
             Responda cada pergunta olhando seu perfil no Google.
             Seja honesto — o diagnóstico só funciona com respostas reais.

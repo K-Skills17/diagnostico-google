@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell,
 } from 'recharts';
@@ -8,11 +8,33 @@ import { WHATSAPP_NUMBER } from '../config';
 
 export default function ResultsDashboard({ results, leadData }) {
   const dashboardRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+
+  const clinicName = leadData?.clinica || 'Minha Clínica';
+  const cityName = leadData?.cidade || 'Brasil';
 
   const whatsappMessage = encodeURIComponent(
-    `Olá! Fiz o Diagnóstico do Google Meu Negócio da minha clínica "${leadData.clinica}" e tirei ${results.totalScore}/100 (${results.gradeLabel}). Gostaria de saber como vocês podem otimizar meu perfil e atrair mais pacientes.`
+    `Olá! Fiz o Diagnóstico do Google Meu Negócio da minha clínica "${clinicName}" e tirei ${results.totalScore}/100 (${results.gradeLabel}). Gostaria de saber como vocês podem otimizar meu perfil e atrair mais pacientes.`
   );
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`;
+
+  const handleCopyLink = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {
+      // Fallback for older browsers
+      const input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const handleExportPDF = async () => {
     if (!dashboardRef.current) return;
@@ -24,7 +46,7 @@ export default function ResultsDashboard({ results, leadData }) {
       const imgWidth = pageWidth - 20;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      pdf.save(`diagnostico-google-${leadData.clinica.toLowerCase().replace(/\s+/g, '-')}.pdf`);
+      pdf.save(`diagnostico-google-${clinicName.toLowerCase().replace(/\s+/g, '-')}.pdf`);
     } catch {
       alert('Erro ao gerar PDF. Tente novamente.');
     }
@@ -52,11 +74,12 @@ export default function ResultsDashboard({ results, leadData }) {
           <div className="progress-step active" />
           <div className="progress-step active" />
           <div className="progress-step active" />
+          <div className="progress-step active" />
         </div>
 
         <div className="results-header fade-up">
           <h2>Diagnóstico do Google</h2>
-          <div className="clinic-name">{leadData.clinica} — {leadData.cidade || 'Brasil'}</div>
+          <div className="clinic-name">{clinicName} — {cityName}</div>
         </div>
 
         {/* Score gauge */}
@@ -163,6 +186,14 @@ export default function ResultsDashboard({ results, leadData }) {
           <br />
           <button className="btn-secondary" onClick={handleExportPDF}>
             Baixar Diagnóstico em PDF
+          </button>
+          <br />
+          <button className="btn-secondary btn-share" onClick={handleCopyLink}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+            {copied ? 'Link Copiado!' : 'Compartilhar Resultado'}
           </button>
         </div>
 

@@ -1,0 +1,11 @@
+{
+  "name": "Diagnóstico Google Meu Negócio",
+  "short_name": "Diagnóstico Google",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF8",
+  "theme_color": "#C4A265",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
